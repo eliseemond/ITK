@@ -106,6 +106,14 @@ public:
   virtual unsigned int
   GetOutputSpaceDimension() const = 0;
 
+  /** Get the size of the input image */
+  virtual unsigned int
+  GetInputImageDimension() const = 0;
+
+  /** Get the size of the output image */
+  virtual unsigned int
+  GetOutputImageDimension() const = 0;
+
   /** Set the transformation parameters and update internal transformation. */
   virtual void
   SetParameters(const ParametersType &) = 0;

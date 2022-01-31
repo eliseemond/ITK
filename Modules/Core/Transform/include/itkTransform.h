@@ -78,7 +78,11 @@ namespace itk
  *
  * \ingroup ITKTransform
  */
-template <typename TParametersValueType, unsigned int NInputDimensions = 3, unsigned int NOutputDimensions = 3>
+template <typename TParametersValueType,
+          unsigned int NInputDimensions = 3,
+          unsigned int NOutputDimensions = 3,
+          unsigned int NInputTransformDimension = NInputDimensions,
+          unsigned int NOutputTransformDimension = NOutputDimensions>
 class ITK_TEMPLATE_EXPORT Transform : public TransformBaseTemplate<TParametersValueType>
 {
 public:
@@ -94,8 +98,10 @@ public:
   itkTypeMacro(Transform, TransformBaseTemplate);
 
   /** Dimension of the domain space. */
-  static constexpr unsigned int InputSpaceDimension = NInputDimensions;
-  static constexpr unsigned int OutputSpaceDimension = NOutputDimensions;
+  static constexpr unsigned int InputImageDimension = NInputDimensions;
+  static constexpr unsigned int OutputImageDimension = NOutputDimensions;
+  static constexpr unsigned int InputSpaceDimension = NInputTransformDimension;
+  static constexpr unsigned int OutputSpaceDimension = NOutputTransformDimension;
 
   /** define the Clone method */
   itkCloneMacro(Self);
@@ -104,12 +110,26 @@ public:
   unsigned int
   GetInputSpaceDimension() const override
   {
-    return NInputDimensions;
+    return NInputTransformDimension;
   }
 
   /** Get the size of the output space */
   unsigned int
   GetOutputSpaceDimension() const override
+  {
+    return NOutputTransformDimension;
+  }
+
+  /** Get the size of the input image */
+  unsigned int
+  GetInputImageDimension() const override
+  {
+    return NInputDimensions;
+  }
+
+  /** Get the size of the output image */
+  unsigned int
+  GetOutputImageDimension() const override
   {
     return NOutputDimensions;
   }
@@ -126,12 +146,14 @@ public:
 
   /** Type of the Jacobian matrix. */
   using JacobianType = Array2D<ParametersValueType>;
-  using JacobianPositionType = vnl_matrix_fixed<ParametersValueType, NOutputDimensions, NInputDimensions>;
-  using InverseJacobianPositionType = vnl_matrix_fixed<ParametersValueType, NInputDimensions, NOutputDimensions>;
+  using JacobianPositionType =
+    vnl_matrix_fixed<ParametersValueType, NOutputTransformDimension, NInputTransformDimension>;
+  using InverseJacobianPositionType =
+    vnl_matrix_fixed<ParametersValueType, NInputTransformDimension, NOutputTransformDimension>;
 
   /** Standard vector type for this class. */
-  using InputVectorType = Vector<TParametersValueType, NInputDimensions>;
-  using OutputVectorType = Vector<TParametersValueType, NOutputDimensions>;
+  using InputVectorType = Vector<TParametersValueType, NInputTransformDimension>;
+  using OutputVectorType = Vector<TParametersValueType, NOutputTransformDimension>;
 
   /** Standard variable length vector type for this class
    *  this provides an interface for the VectorImage class */
@@ -139,20 +161,21 @@ public:
   using OutputVectorPixelType = VariableLengthVector<TParametersValueType>;
 
   /* Standard symmetric second rank tenosr type for this class */
-  using InputSymmetricSecondRankTensorType = SymmetricSecondRankTensor<TParametersValueType, NInputDimensions>;
-  using OutputSymmetricSecondRankTensorType = SymmetricSecondRankTensor<TParametersValueType, NOutputDimensions>;
+  using InputSymmetricSecondRankTensorType = SymmetricSecondRankTensor<TParametersValueType, NInputTransformDimension>;
+  using OutputSymmetricSecondRankTensorType =
+    SymmetricSecondRankTensor<TParametersValueType, NOutputTransformDimension>;
 
   /* Standard tensor type for this class */
   using InputDiffusionTensor3DType = DiffusionTensor3D<TParametersValueType>;
   using OutputDiffusionTensor3DType = DiffusionTensor3D<TParametersValueType>;
 
   /** Standard covariant vector type for this class */
-  using InputCovariantVectorType = CovariantVector<TParametersValueType, NInputDimensions>;
-  using OutputCovariantVectorType = CovariantVector<TParametersValueType, NOutputDimensions>;
+  using InputCovariantVectorType = CovariantVector<TParametersValueType, NInputTransformDimension>;
+  using OutputCovariantVectorType = CovariantVector<TParametersValueType, NOutputTransformDimension>;
 
   /** Standard vnl_vector type for this class. */
-  using InputVnlVectorType = vnl_vector_fixed<TParametersValueType, NInputDimensions>;
-  using OutputVnlVectorType = vnl_vector_fixed<TParametersValueType, NOutputDimensions>;
+  using InputVnlVectorType = vnl_vector_fixed<TParametersValueType, NInputTransformDimension>;
+  using OutputVnlVectorType = vnl_vector_fixed<TParametersValueType, NOutputTransformDimension>;
 
   /** Standard coordinate point type for this class */
   using InputPointType = Point<TParametersValueType, NInputDimensions>;
@@ -160,7 +183,11 @@ public:
 
   /** Base inverse transform type. This type should not be changed to the
    * concrete inverse transform type or inheritance would be lost. */
-  using InverseTransformBaseType = Transform<TParametersValueType, NOutputDimensions, NInputDimensions>;
+  using InverseTransformBaseType = Transform<TParametersValueType,
+                                             NOutputDimensions,
+                                             NInputDimensions,
+                                             NOutputTransformDimension,
+                                             NInputTransformDimension>;
 
   using InverseTransformBasePointer = typename InverseTransformBaseType::Pointer;
 
