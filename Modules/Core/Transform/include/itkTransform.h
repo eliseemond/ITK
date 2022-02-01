@@ -146,14 +146,13 @@ public:
 
   /** Type of the Jacobian matrix. */
   using JacobianType = Array2D<ParametersValueType>;
-  using JacobianPositionType =
-    vnl_matrix_fixed<ParametersValueType, NOutputTransformDimension, NInputTransformDimension>;
+  using JacobianPositionType = vnl_matrix_fixed<ParametersValueType, NOutputDimensions, NInputTransformDimension>;
   using InverseJacobianPositionType =
-    vnl_matrix_fixed<ParametersValueType, NInputTransformDimension, NOutputTransformDimension>;
+    vnl_matrix_fixed<ParametersValueType, NInputTransformDimension, NOutputDimensions>;
 
   /** Standard vector type for this class. */
   using InputVectorType = Vector<TParametersValueType, NInputTransformDimension>;
-  using OutputVectorType = Vector<TParametersValueType, NOutputTransformDimension>;
+  using OutputVectorType = Vector<TParametersValueType, NOutputDimensions>;
 
   /** Standard variable length vector type for this class
    *  this provides an interface for the VectorImage class */
@@ -162,8 +161,7 @@ public:
 
   /* Standard symmetric second rank tenosr type for this class */
   using InputSymmetricSecondRankTensorType = SymmetricSecondRankTensor<TParametersValueType, NInputTransformDimension>;
-  using OutputSymmetricSecondRankTensorType =
-    SymmetricSecondRankTensor<TParametersValueType, NOutputTransformDimension>;
+  using OutputSymmetricSecondRankTensorType = SymmetricSecondRankTensor<TParametersValueType, NOutputDimensions>;
 
   /* Standard tensor type for this class */
   using InputDiffusionTensor3DType = DiffusionTensor3D<TParametersValueType>;
@@ -171,11 +169,11 @@ public:
 
   /** Standard covariant vector type for this class */
   using InputCovariantVectorType = CovariantVector<TParametersValueType, NInputTransformDimension>;
-  using OutputCovariantVectorType = CovariantVector<TParametersValueType, NOutputTransformDimension>;
+  using OutputCovariantVectorType = CovariantVector<TParametersValueType, NOutputDimensions>;
 
   /** Standard vnl_vector type for this class. */
   using InputVnlVectorType = vnl_vector_fixed<TParametersValueType, NInputTransformDimension>;
-  using OutputVnlVectorType = vnl_vector_fixed<TParametersValueType, NOutputTransformDimension>;
+  using OutputVnlVectorType = vnl_vector_fixed<TParametersValueType, NOutputDimensions>;
 
   /** Standard coordinate point type for this class */
   using InputPointType = Point<TParametersValueType, NInputDimensions>;
@@ -191,11 +189,11 @@ public:
 
   using InverseTransformBasePointer = typename InverseTransformBaseType::Pointer;
 
-  using MatrixType = Matrix<TParametersValueType, Self::OutputSpaceDimension, Self::InputSpaceDimension>;
+  using MatrixType = Matrix<TParametersValueType, Self::OutputImageDimension, Self::InputSpaceDimension>;
 
-  using OutputDirectionMatrix = Matrix<double, Self::OutputSpaceDimension, Self::OutputSpaceDimension>;
+  using OutputDirectionMatrix = Matrix<double, Self::OutputImageDimension, Self::OutputImageDimension>;
   using InputDirectionMatrix = Matrix<double, Self::InputSpaceDimension, Self::InputSpaceDimension>;
-  using DirectionChangeMatrix = Matrix<double, Self::OutputSpaceDimension, Self::InputSpaceDimension>;
+  using DirectionChangeMatrix = Matrix<double, Self::OutputImageDimension, Self::InputSpaceDimension>;
 
   using NumberOfParametersType = typename Superclass::NumberOfParametersType;
 

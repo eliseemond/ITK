@@ -191,7 +191,7 @@ Transform<TParametersValueType,
   JacobianPositionType jacobian;
   this->ComputeJacobianWithRespectToPosition(point, jacobian);
   OutputVectorType result;
-  for (unsigned int i = 0; i < NOutputTransformDimension; i++)
+  for (unsigned int i = 0; i < NOutputDimensions; i++)
   {
     result[i] = NumericTraits<TParametersValueType>::ZeroValue();
     for (unsigned int j = 0; j < NInputTransformDimension; j++)
@@ -224,7 +224,7 @@ Transform<TParametersValueType,
   JacobianPositionType jacobian;
   this->ComputeJacobianWithRespectToPosition(point, jacobian);
   OutputVnlVectorType result;
-  for (unsigned int i = 0; i < NOutputTransformDimension; i++)
+  for (unsigned int i = 0; i < NOutputDimensions; i++)
   {
     result[i] = NumericTraits<ParametersValueType>::ZeroValue();
     for (unsigned int j = 0; j < NInputTransformDimension; j++)
@@ -265,9 +265,9 @@ Transform<TParametersValueType,
   this->ComputeJacobianWithRespectToPosition(point, jacobian);
 
   OutputVectorPixelType result;
-  result.SetSize(NOutputTransformDimension);
+  result.SetSize(NOutputDimensions);
 
-  for (unsigned int i = 0; i < NOutputTransformDimension; i++)
+  for (unsigned int i = 0; i < NOutputDimensions; i++)
   {
     result[i] = NumericTraits<ParametersValueType>::ZeroValue();
     for (unsigned int j = 0; j < NInputTransformDimension; j++)
@@ -300,7 +300,7 @@ Transform<TParametersValueType,
   InverseJacobianPositionType jacobian;
   this->ComputeInverseJacobianWithRespectToPosition(point, jacobian);
   OutputCovariantVectorType result;
-  for (unsigned int i = 0; i < NOutputTransformDimension; i++)
+  for (unsigned int i = 0; i < NOutputDimensions; i++)
   {
     result[i] = NumericTraits<TParametersValueType>::ZeroValue();
     for (unsigned int j = 0; j < NInputTransformDimension; j++)
@@ -341,9 +341,9 @@ Transform<TParametersValueType,
   this->ComputeInverseJacobianWithRespectToPosition(point, jacobian);
 
   OutputVectorPixelType result;
-  result.SetSize(NOutputTransformDimension);
+  result.SetSize(NOutputDimensions);
 
-  for (unsigned int i = 0; i < NOutputTransformDimension; i++)
+  for (unsigned int i = 0; i < NOutputDimensions; i++)
   {
     result[i] = NumericTraits<ParametersValueType>::ZeroValue();
     for (unsigned int j = 0; j < NInputTransformDimension; j++)
@@ -452,7 +452,7 @@ Transform<TParametersValueType,
 
   for (unsigned int i = 0; i < NInputTransformDimension; i++)
   {
-    for (unsigned int j = 0; j < NOutputTransformDimension; j++)
+    for (unsigned int j = 0; j < NOutputDimensions; j++)
     {
       if ((i < 3) && (j < 3))
       {
@@ -556,9 +556,9 @@ Transform<TParametersValueType,
   JacobianType                        outTensor = jacobian * tensor * invJacobian;
   OutputSymmetricSecondRankTensorType outputTensor;
 
-  for (unsigned int i = 0; i < NOutputTransformDimension; i++)
+  for (unsigned int i = 0; i < NOutputDimensions; i++)
   {
-    for (unsigned int j = 0; j < NOutputTransformDimension; j++)
+    for (unsigned int j = 0; j < NOutputDimensions; j++)
     {
       outputTensor(i, j) = outTensor(i, j);
     }
@@ -610,13 +610,13 @@ Transform<TParametersValueType,
   JacobianType outTensor = jacobian * tensor * invJacobian;
 
   OutputVectorPixelType outputTensor;
-  outputTensor.SetSize(NOutputTransformDimension * NOutputTransformDimension);
+  outputTensor.SetSize(NOutputDimensions * NOutputDimensions);
 
-  for (unsigned int i = 0; i < NOutputTransformDimension; i++)
+  for (unsigned int i = 0; i < NOutputDimensions; i++)
   {
-    for (unsigned int j = 0; j < NOutputTransformDimension; j++)
+    for (unsigned int j = 0; j < NOutputDimensions; j++)
     {
-      outputTensor[j + NOutputTransformDimension * i] = outTensor(i, j);
+      outputTensor[j + NOutputDimensions * i] = outTensor(i, j);
     }
   }
 
@@ -640,7 +640,7 @@ Transform<TParametersValueType,
 {
   JacobianPositionType jacobian_fixed;
   this->ComputeJacobianWithRespectToPosition(pnt, jacobian_fixed);
-  jacobian.SetSize(NOutputTransformDimension, NInputTransformDimension);
+  jacobian.SetSize(NOutputDimensions, NInputTransformDimension);
   jacobian.set(jacobian_fixed.data_block());
 }
 
@@ -659,7 +659,7 @@ Transform<TParametersValueType,
 {
   InverseJacobianPositionType jacobian_fixed;
   this->ComputeInverseJacobianWithRespectToPosition(pnt, jacobian_fixed);
-  jacobian.SetSize(NInputTransformDimension, NOutputTransformDimension);
+  jacobian.SetSize(NInputTransformDimension, NOutputDimensions);
   jacobian.set(jacobian_fixed.data_block());
 }
 #endif
@@ -682,7 +682,7 @@ Transform<TParametersValueType,
   this->ComputeJacobianWithRespectToPosition(pnt, forward_jacobian);
 
   using SVDAlgorithmType =
-    vnl_svd_fixed<typename JacobianPositionType::element_type, NOutputTransformDimension, NInputTransformDimension>;
+    vnl_svd_fixed<typename JacobianPositionType::element_type, NOutputDimensions, NInputTransformDimension>;
   SVDAlgorithmType svd(forward_jacobian);
   jacobian.set(svd.inverse().data_block());
 }
